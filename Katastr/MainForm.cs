@@ -1,4 +1,5 @@
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace Katastr
 {
@@ -86,7 +87,13 @@ namespace Katastr
                     g.DrawString($"X: {p.X}; Y: {p.Y}", DefaultFont, Brushes.Black, p);
                 }
             }
+
+            var mouseLoc = image_pBox.PointToClient(Cursor.Position);
+            g.FillEllipse(Brushes.Black, mouseLoc.X, mouseLoc.Y, 2, 2);
+            g.DrawString($"X: {mouseLoc.X}; Y: {mouseLoc.Y}", DefaultFont, Brushes.Black, mouseLoc);
         }
+
+
 
 
         private void Retext()
@@ -158,7 +165,7 @@ namespace Katastr
 
         }
 
-        // TODO
+        // TODO polygon export
         private void export_btn_Click(object sender, EventArgs e)
         {
 
@@ -168,6 +175,17 @@ namespace Katastr
         {
             Points.Clear();
             IsMeasuring = true;
+            image_pBox.Invalidate();
+        }
+
+
+        private void image_pBox_MouseMove(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
             image_pBox.Invalidate();
         }
     }

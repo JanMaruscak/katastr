@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.loadImg_btn = new System.Windows.Forms.Button();
             this.image_pBox = new System.Windows.Forms.PictureBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -43,6 +44,7 @@
             this.measureMeritko_btn = new System.Windows.Forms.Button();
             this.ratio_label = new System.Windows.Forms.Label();
             this.wholeArea_label = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.image_pBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ratio_num)).BeginInit();
             this.SuspendLayout();
@@ -67,6 +69,7 @@
             this.image_pBox.Click += new System.EventHandler(this.image_pBox_Click);
             this.image_pBox.Paint += new System.Windows.Forms.PaintEventHandler(this.image_pBox_Paint);
             this.image_pBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.image_pBox_MouseDown);
+            this.image_pBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.image_pBox_MouseMove);
             // 
             // textBox1
             // 
@@ -180,6 +183,12 @@
             this.wholeArea_label.TabIndex = 16;
             this.wholeArea_label.Text = "Whole";
             // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 10;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -200,6 +209,7 @@
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.image_pBox);
             this.Controls.Add(this.loadImg_btn);
+            this.DoubleBuffered = true;
             this.Name = "MainForm";
             this.Text = "MainForm";
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -227,5 +237,6 @@
         private Button measureMeritko_btn;
         private Label ratio_label;
         private Label wholeArea_label;
+        private System.Windows.Forms.Timer timer1;
     }
 }
