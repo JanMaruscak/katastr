@@ -88,6 +88,7 @@ namespace Katastr
                 }
             }
 
+
             var mouseLoc = image_pBox.PointToClient(Cursor.Position);
             g.FillEllipse(Brushes.Black, mouseLoc.X, mouseLoc.Y, 2, 2);
             g.DrawString($"X: {mouseLoc.X}; Y: {mouseLoc.Y}", DefaultFont, Brushes.Black, mouseLoc);
@@ -105,12 +106,7 @@ namespace Katastr
         int MeasureCounter = 0;
         private void image_pBox_MouseDown(object sender, MouseEventArgs e)
         {
-            if (IsMeasuring && MeasureCounter == 2) return;
-            else if (IsMeasuring) MeasureCounter++;
-
-            Points.Add(e.Location);
-            Retext();
-            image_pBox.Invalidate();
+            FindNearestPoint(e.Location);
         }
         private float GaussArea(List<Point> points, int ratio)
         {
@@ -170,6 +166,7 @@ namespace Katastr
         {
 
         }
+        
 
         private void measureMeritko_btn_Click(object sender, EventArgs e)
         {
@@ -186,6 +183,35 @@ namespace Katastr
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            image_pBox.Invalidate();
+        }
+        private bool FindNearestPoint(Point mouse)
+        {
+            Point change = new Point();
+            foreach (var item in Points)
+            {
+                if(PointLen(mouse, item) < 20)
+                {
+                    change = item;
+                    break;
+                }
+            }
+            Points.Remove(change);
+            return false;
+        }
+
+        private void image_pBox_MouseUp(object sender, MouseEventArgs e)
+        {
+            if(e.X < 0 || e.Y < 0) return;
+            if (e.X > image_pBox.Width || e.Y > image_pBox.Width) return;
+
+            if (IsMeasuring && MeasureCounter == 2) return;
+            else if (IsMeasuring) MeasureCounter++;
+
+
+
+            Points.Add(e.Location);
+            Retext();
             image_pBox.Invalidate();
         }
     }
