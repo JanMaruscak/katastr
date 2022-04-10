@@ -14,10 +14,11 @@ namespace Katastr
             measure_cBox.SelectedIndex = 0;
             measure_cBox.DropDownStyle = ComboBoxStyle.DropDownList;
         }
-        public int Ratio = 1000;
+        public float Ratio = 1000;
         public string FilePath = "";
         public bool IsMeasuring = false;
         public float WholeArea = 0f;
+        public List<List<Point>> OldPoints = new List<List<Point>>();
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -67,21 +68,62 @@ namespace Katastr
         }
 
         List<Point> Points = new List<Point>();
+        private Point HalfBetweenPoints(Point p1, Point p2)
+        {
+            return new Point((p1.X + p2.X)/2, (p1.Y + p2.Y) / 2);
+        }
 
         private void image_pBox_Paint(object sender, PaintEventArgs e)
         {
             var g = e.Graphics;
+            Point mouseLoc = image_pBox.PointToClient(Cursor.Position);
+            foreach (var list in OldPoints)
+            {
+                if (list.Count > 1)
+                {
+                    g.DrawPolygon(Pens.Red, list.ToArray());
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        Point p = list[i];
+                        g.DrawString($"X: {p.X}; Y: {p.Y}", DefaultFont, Brushes.Black, p);
+
+                        if (i % 2 == 1)
+                        {
+                            var half = HalfBetweenPoints(p, list[i - 1]);
+                            g.DrawString($"{PointLen(p, list[i - 1]) * Ratio}m", DefaultFont, Brushes.Black, half);
+                        }
+                    }
+
+                }
+                else if (list.Count == 1)
+                {
+                    g.FillEllipse(Brushes.Red, list[0].X - 2, list[0].Y - 2, 5, 5);
+                    foreach (var p in list)
+                    {
+                        g.DrawString($"X: {p.X}; Y: {p.Y}", DefaultFont, Brushes.Black, p);
+                    }
+                }
+            }
             if (Points.Count > 1)
             {
                 g.DrawPolygon(Pens.Black, Points.ToArray());
-                foreach (var p in Points)
+                for (int i = 0; i < Points.Count; i++)
                 {
+                    Point p = Points[i];
                     g.DrawString($"X: {p.X}; Y: {p.Y}", DefaultFont, Brushes.Black, p);
+                    g.FillEllipse(Brushes.Red, p.X - 2, p.Y - 2, 5, 5);
+
+                    if (i % 2 == 1)
+                    {
+                        var half = HalfBetweenPoints(p, Points[i - 1]);
+                        g.DrawString($"{PointLen(p,Points[i-1])*Ratio}m", DefaultFont, Brushes.Black, half);
+                    }
                 }
+
             }
             else if(Points.Count == 1)
             {
-                g.FillEllipse(Brushes.Black, Points[0].X, Points[0].Y,2,2);
+                g.FillEllipse(Brushes.Red, Points[0].X, Points[0].Y,5,5);
                 foreach (var p in Points)
                 {
                     g.DrawString($"X: {p.X}; Y: {p.Y}", DefaultFont, Brushes.Black, p);
@@ -89,8 +131,7 @@ namespace Katastr
             }
 
 
-            var mouseLoc = image_pBox.PointToClient(Cursor.Position);
-            g.FillEllipse(Brushes.Black, mouseLoc.X, mouseLoc.Y, 2, 2);
+            g.FillEllipse(Brushes.Red, mouseLoc.X - 2, mouseLoc.Y - 2, 5, 5);
             g.DrawString($"X: {mouseLoc.X}; Y: {mouseLoc.Y}", DefaultFont, Brushes.Black, mouseLoc);
         }
 
@@ -108,15 +149,15 @@ namespace Katastr
         {
             FindNearestPoint(e.Location);
         }
-        private float GaussArea(List<Point> points, int ratio)
+        private float GaussArea(List<Point> points, float ratio)
         {
             points.Add(points[0]);
             float area = MathF.Abs(points.Take(points.Count - 1)
             .Select((p, i) => (points[i + 1].X - p.X) * (points[i + 1].Y + p.Y))
             .Sum() / 2);
-            return area / ratio;
+            return area * ratio;
         }
-        private float Circumference(List<Point> points, int ratio)
+        private float Circumference(List<Point> points, float ratio)
         {
             points.Add(points[0]);
             float result = 0;
@@ -126,8 +167,33 @@ namespace Katastr
                 var yLen = points[i + 1].Y - points[i].Y;
                 result += MathF.Sqrt(MathF.Pow(xLen,2) + MathF.Pow(yLen,2));
             }
-            return result / ratio;
+            return result * ratio;
 
+        }
+        bool ColorsAreClose(Color a, Color z, int threshold = 50)
+        {
+            int r = (int)a.R - z.R,
+                g = (int)a.G - z.G,
+                b = (int)a.B - z.B;
+            return (r * r + g * g + b * b) <= threshold * threshold;
+        }
+        private Point SnapIntoPlace(Point loc)
+        {
+            Bitmap bmp = (Bitmap)image_pBox.Image;
+            if(WholeArea == 0) return loc;
+            for (int x = -5; x < 5; x++)
+            {
+                for (int y = -5; y < 5; y++)
+                {
+                    var newLoc = new Point(loc.X + x, loc.Y + y);
+                    var color = bmp.GetPixel(newLoc.X, newLoc.Y); 
+                    if (newLoc.X > 0 && newLoc.Y > 0 && ColorsAreClose(color,Color.Black))
+                    {
+                        return new Point(loc.X + x, loc.Y + y);
+                    }
+                }
+            }
+            return loc;
         }
 
         private void measure_cBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -144,16 +210,15 @@ namespace Katastr
         private void meritko_btn_Click(object sender, EventArgs e)
         {
 
-            if(int.TryParse(meritko_txt.Text, out int value))
+            if(float.TryParse(meritko_txt.Text, out float value))
             {
                 if(value > 0)
                 {
-                    Ratio = value;
                     MeasureCounter = 0;
-                    float pxToM = Ratio / PointLen(Points[0], Points[1]);
+                    Ratio = value / PointLen(Points[0], Points[1]);
                     Points.Clear();
                     IsMeasuring = false;
-                    ratio_label.Text = $"1px = {pxToM}m";
+                    ratio_label.Text = $"1px = {Ratio}m";
                     Retext();
                 }
 
@@ -164,7 +229,12 @@ namespace Katastr
         // TODO polygon export
         private void export_btn_Click(object sender, EventArgs e)
         {
-
+            string output = "";
+            foreach (var item in Points)
+            {
+                output += $"{item.X},{item.Y};";
+            }
+            Clipboard.SetText(output);
         }
         
 
@@ -196,8 +266,9 @@ namespace Katastr
                     break;
                 }
             }
+            if (change == new Point()) return false;
             Points.Remove(change);
-            return false;
+            return true;
         }
 
         private void image_pBox_MouseUp(object sender, MouseEventArgs e)
@@ -209,10 +280,20 @@ namespace Katastr
             else if (IsMeasuring) MeasureCounter++;
 
 
-
-            Points.Add(e.Location);
+            var snappedLoc = SnapIntoPlace(e.Location);
+            Points.Add(snappedLoc);
             Retext();
             image_pBox.Invalidate();
+        }
+
+        private void import_btn_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void newPolygon_btn_Click(object sender, EventArgs e)
+        {
+            OldPoints.Add(new List<Point>(Points));
+            Points.Clear();
         }
     }
 }

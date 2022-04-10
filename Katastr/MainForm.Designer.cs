@@ -39,15 +39,15 @@
             this.label3 = new System.Windows.Forms.Label();
             this.meritko_btn = new System.Windows.Forms.Button();
             this.measure_cBox = new System.Windows.Forms.ComboBox();
-            this.ratio_num = new System.Windows.Forms.NumericUpDown();
             this.export_btn = new System.Windows.Forms.Button();
             this.measureMeritko_btn = new System.Windows.Forms.Button();
             this.ratio_label = new System.Windows.Forms.Label();
             this.wholeArea_label = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.import_btn = new System.Windows.Forms.Button();
+            this.pointImport_txt = new System.Windows.Forms.TextBox();
+            this.newPolygon_btn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.image_pBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ratio_num)).BeginInit();
             this.SuspendLayout();
             // 
             // loadImg_btn
@@ -147,14 +147,6 @@
             this.measure_cBox.TabIndex = 11;
             this.measure_cBox.SelectedIndexChanged += new System.EventHandler(this.measure_cBox_SelectedIndexChanged);
             // 
-            // ratio_num
-            // 
-            this.ratio_num.Location = new System.Drawing.Point(491, 104);
-            this.ratio_num.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.ratio_num.Name = "ratio_num";
-            this.ratio_num.Size = new System.Drawing.Size(131, 23);
-            this.ratio_num.TabIndex = 12;
-            // 
             // export_btn
             // 
             this.export_btn.Location = new System.Drawing.Point(670, 9);
@@ -189,7 +181,7 @@
             // wholeArea_label
             // 
             this.wholeArea_label.AutoSize = true;
-            this.wholeArea_label.Location = new System.Drawing.Point(556, 64);
+            this.wholeArea_label.Location = new System.Drawing.Point(490, 114);
             this.wholeArea_label.Name = "wholeArea_label";
             this.wholeArea_label.Size = new System.Drawing.Size(41, 15);
             this.wholeArea_label.TabIndex = 16;
@@ -210,18 +202,37 @@
             this.import_btn.TabIndex = 17;
             this.import_btn.Text = "Import points";
             this.import_btn.UseVisualStyleBackColor = true;
+            this.import_btn.Click += new System.EventHandler(this.import_btn_Click);
+            // 
+            // pointImport_txt
+            // 
+            this.pointImport_txt.Location = new System.Drawing.Point(670, 72);
+            this.pointImport_txt.Name = "pointImport_txt";
+            this.pointImport_txt.Size = new System.Drawing.Size(100, 23);
+            this.pointImport_txt.TabIndex = 18;
+            // 
+            // newPolygon_btn
+            // 
+            this.newPolygon_btn.Location = new System.Drawing.Point(483, 58);
+            this.newPolygon_btn.Name = "newPolygon_btn";
+            this.newPolygon_btn.Size = new System.Drawing.Size(108, 23);
+            this.newPolygon_btn.TabIndex = 19;
+            this.newPolygon_btn.Text = "New polygon";
+            this.newPolygon_btn.UseVisualStyleBackColor = true;
+            this.newPolygon_btn.Click += new System.EventHandler(this.newPolygon_btn_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(792, 404);
+            this.Controls.Add(this.newPolygon_btn);
+            this.Controls.Add(this.pointImport_txt);
             this.Controls.Add(this.import_btn);
             this.Controls.Add(this.wholeArea_label);
             this.Controls.Add(this.ratio_label);
             this.Controls.Add(this.measureMeritko_btn);
             this.Controls.Add(this.export_btn);
-            this.Controls.Add(this.ratio_num);
             this.Controls.Add(this.measure_cBox);
             this.Controls.Add(this.meritko_btn);
             this.Controls.Add(this.label3);
@@ -238,7 +249,6 @@
             this.Text = "MainForm";
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.image_pBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ratio_num)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -256,12 +266,13 @@
         private Label label3;
         private Button meritko_btn;
         private ComboBox measure_cBox;
-        private NumericUpDown ratio_num;
         private Button export_btn;
         private Button measureMeritko_btn;
         private Label ratio_label;
         private Label wholeArea_label;
         private System.Windows.Forms.Timer timer1;
         private Button import_btn;
+        private TextBox pointImport_txt;
+        private Button newPolygon_btn;
     }
 }

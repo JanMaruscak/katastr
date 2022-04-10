@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "JmTDt1Ti0WUbh5YG3vSLbakXcA3/YfwIU8gVEsGwNUsMWG4Ajb7Dep+VGFh6Lc6DFNOFjx18B/oLBkQD5wedJA==",
+  "dgSpecHash": "ZxPIErf1DNPmvgrvyMSZEJ6p2wrFXcvIbmAWViGRIIB/U90md+gQvS7bQaBStry92dOzlmnVsqiAySX9JD50nQ==",
   "success": true,
-  "projectFilePath": "C:\\dev\\katastr\\Katastr\\Katastr.csproj",
+  "projectFilePath": "C:\\dev\\Katastr\\Katastr\\Katastr.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

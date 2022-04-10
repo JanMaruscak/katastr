@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\dev\\katastr\\Katastr\\Katastr.csproj": {}
+    "C:\\dev\\Katastr\\Katastr\\Katastr.csproj": {}
   },
   "projects": {
-    "C:\\dev\\katastr\\Katastr\\Katastr.csproj": {
+    "C:\\dev\\Katastr\\Katastr\\Katastr.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\dev\\katastr\\Katastr\\Katastr.csproj",
+        "projectUniqueName": "C:\\dev\\Katastr\\Katastr\\Katastr.csproj",
         "projectName": "Katastr",
-        "projectPath": "C:\\dev\\katastr\\Katastr\\Katastr.csproj",
+        "projectPath": "C:\\dev\\Katastr\\Katastr\\Katastr.csproj",
         "packagesPath": "C:\\Users\\janma\\.nuget\\packages\\",
-        "outputPath": "C:\\dev\\katastr\\Katastr\\obj\\",
+        "outputPath": "C:\\dev\\Katastr\\Katastr\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
