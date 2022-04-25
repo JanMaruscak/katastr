@@ -90,7 +90,7 @@ namespace Katastr
                         if (i % 2 == 1)
                         {
                             var half = HalfBetweenPoints(p, list[i - 1]);
-                            g.DrawString($"{PointLen(p, list[i - 1]) * Ratio}m", DefaultFont, Brushes.Black, half);
+                            g.DrawString($"{PointLen(p, list[i - 1]) * Ratio}{measure_cBox.SelectedItem.ToString()}", DefaultFont, Brushes.Black, half);
                         }
                     }
 
@@ -116,7 +116,7 @@ namespace Katastr
                     if (i % 2 == 1)
                     {
                         var half = HalfBetweenPoints(p, Points[i - 1]);
-                        g.DrawString($"{PointLen(p,Points[i-1])*Ratio}m", DefaultFont, Brushes.Black, half);
+                        g.DrawString($"{PointLen(p,Points[i-1])*Ratio}{measure_cBox.SelectedItem.ToString()}", DefaultFont, Brushes.Black, half);
                     }
                 }
 
@@ -140,6 +140,7 @@ namespace Katastr
 
         private void Retext()
         {
+            ratio_label.Text = $"1px = {Ratio}{measure_cBox.SelectedItem.ToString()}";
             if (Points.Count == 0) return;
             textBox1.Text = GaussArea(new List<Point>(Points), Ratio).ToString();
             textBox2.Text = Circumference(new List<Point>(Points), Ratio).ToString();
@@ -198,7 +199,7 @@ namespace Katastr
 
         private void measure_cBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            Retext();
         }
         public float PointLen(Point p1, Point p2)
         {
@@ -218,7 +219,7 @@ namespace Katastr
                     Ratio = value / PointLen(Points[0], Points[1]);
                     Points.Clear();
                     IsMeasuring = false;
-                    ratio_label.Text = $"1px = {Ratio}m";
+                    ratio_label.Text = $"1px = {Ratio}{measure_cBox.SelectedText}";
                     Retext();
                 }
 
@@ -288,6 +289,14 @@ namespace Katastr
 
         private void import_btn_Click(object sender, EventArgs e)
         {
+            string[] import = pointImport_txt.Text.Split(";");
+            OldPoints.Add(new List<Point>(Points));
+            Points.Clear();
+            for (int i = 0; i < import.Length - 1; i++)
+            {
+                string[] point = import[i].Split(',');
+                Points.Add(new Point(int.Parse(point[0]), int.Parse(point[1])));
+            }
         }
 
         private void newPolygon_btn_Click(object sender, EventArgs e)
